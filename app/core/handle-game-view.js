@@ -17,36 +17,41 @@ export function GameViewHandler(transformerActions): void {
   console.info('GameViewHandler; transformers=%O', transformerActions);
   let debuggerAttached = false;
   let requestMap = Map();
+  let firstGameLoad = true;
+
+  const context = new HandlerContext({
+    firstGameLoad,
+    transformerActions
+  });
 
   // Manual currying is fine too 🍛
   return (event): void => {
     const view = event.target;
-    const wc = view.getWebContents();
-    const ws = wc.session;
+    const webContents = view.getWebContents();
+    const webSession = webContents.session;
+    const currentCtx = context.merge({ webContents: webContents });
 
-    view.addEventListeners('close', (e) => {
+    console.log('currentCtx', currentCtx.toJS());
+
+    view.addEventListener('close', (e) => {
       console.log('Closing; disabling debugger.');
-      wc.debugger.sendCommand('Network.disable');
-    });
-
-    const context = new HandlerContext({
-      webContents: wc
+      webContents.debugger.sendCommand('Network.disable');
     });
 
     if (!debuggerAttached) {
       try {
-        wc.debugger.attach(PROTOCOL_VERSION);
+        webContents.debugger.attach(PROTOCOL_VERSION);
         debuggerAttached = true;
       }
       catch (err) {
         console.error('An error has occurred:', err);
       }
 
-      wc.executeJavascript(cookies);
-      wc.debugger.on('detach', onDebuggerDetach(context));
-      wc.debugger.on('message', onDebuggerMessage(context));
-      wc.debugger.sendCommand('Network.enable');
-      ws.webRequest.onBeforeRequest(onBeforeRequest(context));
+      webContents.executeJavaScript(cookies);
+      webContents.debugger.on('detach', onDebuggerDetach(context));
+      webContents.debugger.on('message', onDebuggerMessage(context));
+      webContents.debugger.sendCommand('Network.enable');
+      webSession.webRequest.onBeforeRequest(onBeforeRequest(context, res => firstGameLoad = res.firstGameLoad));
     }
   }
 }

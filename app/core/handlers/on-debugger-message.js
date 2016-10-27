@@ -1,8 +1,9 @@
 // @flow
+import R from 'ramda';
 
-const onDebuggerMessage = (context) => () => {
+const onDebuggerMessage = (context, event, method, params) => {
   // Handler function body
-  console.log('onDebuggerMessage');
+  console.log('onDebuggerMessage: method=%s', method);
 };
 
-export default onDebuggerMessage;
+export default R.curry(onDebuggerMessage);

@@ -1,8 +1,9 @@
 // @flow
+import R from 'ramda';
 
-const onDebuggerDetach = (context) => () => {
+function onDebuggerDetach(context, reason) {
   // Handler function body
-  console.log('onDebuggerDetach');
-};
+  console.log('onDebuggerDetach: reason=%s', reason);
+}
 
-export default onDebuggerDetach;
+export default R.curry(onDebuggerDetach);
