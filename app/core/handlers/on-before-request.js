@@ -1,7 +1,6 @@
 // @flow
-import { HandlerContext } from '../_types';
 
-const onBeforeRequest = (context: HandlerContext) => () => {
+const onBeforeRequest = (context) => () => {
   // Handler function body
   console.log('onBeforeRequest');
 };

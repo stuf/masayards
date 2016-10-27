@@ -1,7 +1,7 @@
 // @flow
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
-import { handleGameView } from '../../core/game-data-handler';
+import { GameViewHandler } from '../../core/handle-game-view';
 import config from '../../config';
 
 class GameView extends Component {
@@ -11,6 +11,7 @@ class GameView extends Component {
   };
 
   componentDidMount() {
+    const handler = new GameViewHandler(this.props.transformerActions);
     const webView = Object.assign(document.createElement('webview'), {
       nodeintegration: true,
       plugins: true,
@@ -18,7 +19,7 @@ class GameView extends Component {
       src: config.gameUrl
     });
 
-    webView.addEventListener('dom-ready', handleGameView(this.props.transformerActions));
+    webView.addEventListener('dom-ready', handler);
 
     findDOMNode(this.refs.gameViewHolder).appendChild(webView);
   }
