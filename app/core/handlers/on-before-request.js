@@ -12,15 +12,16 @@ import { HandlerContext } from '../records';
  * @param {any} callback
  */
 function onBeforeRequest(context, contextCallbackFn, details, callback) {
-  console.log('onBeforeRequest');
-  const shouldCancel = config.gameSwfPrefix.test(details.url) && context.firstGameLoad;
-  callback({ cancel: shouldCancel });
+  const shouldCancelRequest = config.gameSwfPrefix.test(details.url) && context.firstGameLoad;
+  callback({ cancel: shouldCancelRequest });
 
-  if (shouldCancel) {
-    console.log('Found game SWF at URL %s', details.url);
+  // Detect when the game SWF is loaded and take it into view.
+  if (shouldCancelRequest) {
     context.webContents.loadURL(details.url);
-    const newContext = context.set('firstGameLoad', false);
-    contextCallbackFn(newContext);
+    contextCallbackFn(context.merge({
+      firstGameLoad: false,
+      handleMessages: true
+    }));
   }
 }
 
