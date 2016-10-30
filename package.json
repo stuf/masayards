@@ -96,7 +96,8 @@
     "webpack-dev-middleware": "^1.8.3",
     "webpack-hot-middleware": "^2.12.2",
     "webpack-merge": "^0.14.1",
-    "webpack-validator": "^2.2.9"
+    "webpack-validator": "^2.2.9",
+    "winston": "^2.2.0"
   },
   "dependencies": {
     "css-modules-require-hook": "^4.0.5",
