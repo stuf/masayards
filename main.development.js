@@ -36,6 +36,8 @@ app.commandLine.appendSwitch('ppapi-flash-version', '23.0.0.205');
 app.on('ready', async () => {
   await installExtensions();
 
+  require('./src/main');
+
   mainWindow = new BrowserWindow({
     show: false,
     width: 1380,
