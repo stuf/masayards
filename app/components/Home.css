@@ -1,8 +1,5 @@
 .container {
-  position: absolute;
-  top: 30%;
-  left: 10px;
-  text-align: center;
+  text-align: left;
 }
 
 .container h2 {
@@ -10,5 +7,9 @@
 }
 
 .container a {
+  display: inline-block;
+  margin-top: 1rem;
   font-size: 1.4rem;
+  border: solid 1px #f00;
+  padding: 0.5rem 1.5rem;
 }
